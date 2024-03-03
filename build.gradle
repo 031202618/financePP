@@ -1,17 +1,36 @@
 plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
+}
+
+bootJar {
+    enabled = true
 }
 
 group = 'zzgo'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = '19'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'mysql:mysql-connector-java:5.1.49'
 }
 
 test {

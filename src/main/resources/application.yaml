@@ -1,0 +1,11 @@
+server:
+  port: 38080
+  shutdown: graceful
+
+spring:
+  application:
+    name: financePP
+  datasource:
+    url: todo
+    username: todo
+    password: todo
