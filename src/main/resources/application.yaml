@@ -1,5 +1,5 @@
 server:
-  port: 38080
+  port: 80
   shutdown: graceful
 
 spring:
@@ -9,5 +9,9 @@ spring:
     url: jdbc:mysql://192.168.0.104:3306/financepp
     username: root
     password: abctod
+    driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
+  devtools:
+    restart:
+      enabled: true

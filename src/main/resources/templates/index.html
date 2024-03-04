@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-
+<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar" style="width: 0%"></div>
+</div>
+<div class="container text-center">
+    <nav class="navbar bg-body-tertiary">
+        <form class="d-flex" role="search">
+            <button class="btn btn-outline-success me-5" type="button">新增资金记录</button>
+            <input class="form-control me-5" type="search" placeholder="年份(e.g: 2024)" aria-label="Search">
+            <input class="form-control me-5" type="search" placeholder="季度(1/2/3/4)" aria-label="Search">
+            <input class="form-control me-5" type="search" placeholder="月份(1-12)" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </nav>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">添加时间</th>
+            <th scope="col">分类</th>
+            <th scope="col">金额</th>
+            <th scope="col">创建时间</th>
+            <th scope="col">修改时间</th>
+            <th scope="col">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">2</th>
+            <td>2024-01</td>
+            <td>债券</td>
+            <td>10080</td>
+            <td>2024-3-4 21:33:19</td>
+            <td>
+                <button type="button" class="btn btn-warning btn-sm">编辑</button>
+                <button type="button" class="btn btn-danger btn-sm">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Content here -->
+</div>
+<script  type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
