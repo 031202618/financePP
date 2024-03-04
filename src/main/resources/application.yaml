@@ -6,8 +6,8 @@ spring:
   application:
     name: financePP
   datasource:
-    url: todo
-    username: todo
-    password: todo
+    url: jdbc:mysql://192.168.0.104:3306/financepp
+    username: root
+    password: abctod
   thymeleaf:
     cache: false
