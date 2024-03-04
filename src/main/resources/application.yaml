@@ -9,3 +9,5 @@ spring:
     url: todo
     username: todo
     password: todo
+  thymeleaf:
+    cache: false
