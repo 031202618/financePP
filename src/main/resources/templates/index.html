@@ -6,13 +6,51 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-    <div class="progress-bar" style="width: 0%"></div>
+<!--复用组件-->
+<div class="modal fade" id="newFundDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">新增资金记录</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="addTime" class="col-form-label">添加时间</label>
+                        <input type="date" class="form-control" id="addTime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="col-form-label">分类</label>
+                        <input type="" class="form-control" id="category">
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">金额</label>
+                        <textarea class="form-control" id="amount"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createTime" class="col-form-label">创建时间</label>
+                        <textarea class="form-control" id="createTime"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateTime" class="col-form-label">修改时间</label>
+                        <textarea class="form-control" id="updateTime"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">新增</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!--开始-->
 <div class="container text-center">
     <nav class="navbar bg-body-tertiary">
         <form class="d-flex" role="search">
-            <button class="btn btn-outline-success me-5" type="button">新增资金记录</button>
+            <button class="btn btn-outline-success me-5" type="button" data-bs-toggle="modal" data-bs-target="#newFundDetails" data-bs-whatever="@mdo">新增资金记录</button>
             <input class="form-control me-5" type="search" placeholder="年份(e.g: 2024)" aria-label="Search">
             <input class="form-control me-5" type="search" placeholder="季度(1/2/3/4)" aria-label="Search">
             <input class="form-control me-5" type="search" placeholder="月份(1-12)" aria-label="Search">
@@ -46,6 +84,7 @@
     </table>
     <!-- Content here -->
 </div>
+<!--结束-->
 <script  type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
