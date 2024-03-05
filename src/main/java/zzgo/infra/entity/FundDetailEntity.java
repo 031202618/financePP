@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import zzgo.domain.FundDetail;
 import zzgo.domain.enums.CategoryEnum;
 import zzgo.domain.util.Money;
@@ -18,6 +20,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@SQLDelete(sql = "UPDATE fund_detail SET delete_time = NOW() WHERE id = ? ")
+@Where(clause = "delete_time is null")
 @Entity
 @Table(name = "fund_detail")
 public class FundDetailEntity {
@@ -37,5 +41,9 @@ public class FundDetailEntity {
 
     public static FundDetailEntity of(FundDetail fundDetail) {
         return new FundDetailEntity(0, fundDetail.getCategory().getId(), fundDetail.getAddTime(), fundDetail.getAmount().amount(), fundDetail.getCreateTime(), fundDetail.getUpdateTime());
+    }
+
+    public FundDetail toDomain() {
+        return new FundDetail(id, CategoryEnum.of(id), addTime, new Money(amount), createTime, updateTime);
     }
 }

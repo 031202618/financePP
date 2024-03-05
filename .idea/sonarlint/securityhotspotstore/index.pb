@@ -34,3 +34,5 @@ e
 0src/main/java/zzgo/domain/FundDetailService.java,2\4\242cfaba4e8473dd6e1133018e002e5334a72fe7
 b
 2src/main/java/zzgo/infra/mysql/FundDetailRepo.java,7\2\7292c1cc02c333f9a149d0f9519ee32b7a6ca656
+X
+(src/main/java/zzgo/domain/util/Time.java,d\f\df7905bb35c6b488dd9d73c4e6b4d99d4b0a2fac

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class FundDetail {
+    private int id;
     private CategoryEnum category;
     private LocalDate addTime;
     private Money amount;
@@ -24,7 +25,7 @@ public class FundDetail {
     private LocalDateTime updateTime;
 
     public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount){
-        return new FundDetail(category, addTime, amount, LocalDateTime.now(), LocalDateTime.now());
+        return new FundDetail(0, category, addTime, amount, LocalDateTime.now(), LocalDateTime.now());
     }
 
 }
