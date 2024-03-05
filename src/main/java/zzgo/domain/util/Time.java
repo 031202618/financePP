@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class Time {
+    private Time() {
+    }
+
     public static List<Integer> quarter2Month(int quarter) {
         return switch (quarter) {
             case 1 -> List.of(1, 2, 3);
@@ -21,6 +24,6 @@ public class Time {
             case 7,8,9 -> 3;
             case 10,11,12 -> 4;
             default -> 0;
-        }
+        };
     }
 }

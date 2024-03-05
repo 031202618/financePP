@@ -18,7 +18,7 @@ public record Money(
     }
 
     public String toString(){
-        return amount / 100.0 + "";
+        return amount / 100.0 + "¥";
     }
 
     public String toAmount(){

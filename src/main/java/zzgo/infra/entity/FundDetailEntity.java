@@ -10,8 +10,8 @@ import zzgo.domain.FundDetail;
 import zzgo.domain.enums.CategoryEnum;
 import zzgo.domain.util.Money;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * @author zhengw
@@ -31,7 +31,7 @@ public class FundDetailEntity {
     @Column
     private int category;
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDate addTime;
+    private LocalDateTime recordTime;
     @Column
     private int amount;
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,10 +40,10 @@ public class FundDetailEntity {
     private LocalDateTime updateTime;
 
     public static FundDetailEntity of(FundDetail fundDetail) {
-        return new FundDetailEntity(0, fundDetail.getCategory().getId(), fundDetail.getAddTime(), fundDetail.getAmount().amount(), fundDetail.getCreateTime(), fundDetail.getUpdateTime());
+        return new FundDetailEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getCreateTime(), fundDetail.getUpdateTime());
     }
 
     public FundDetail toDomain() {
-        return new FundDetail(id, CategoryEnum.of(id), addTime, new Money(amount), createTime, updateTime);
+        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), createTime, updateTime);
     }
 }
