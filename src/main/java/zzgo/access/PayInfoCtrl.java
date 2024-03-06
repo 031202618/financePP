@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import zzgo.app.PayInfoService;
 import zzgo.domain.FundDetail;
-import zzgo.domain.enums.CategoryEnum;
-import zzgo.domain.util.Money;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +35,7 @@ public class PayInfoCtrl {
             ){
         List<FundDetail> fundDetails = payInfoService.listFundDetails(year, quarter, month);
         model.addAttribute("fundDetails", fundDetails);
-        return "index";
+        return "fundDetail";
     }
 
     @DeleteMapping("/fundDetail")
