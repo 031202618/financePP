@@ -34,16 +34,18 @@ public class FundDetailEntity {
     private LocalDateTime recordTime;
     @Column
     private int amount;
+    @Column
+    private String comment;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createTime;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateTime;
 
     public static FundDetailEntity of(FundDetail fundDetail) {
-        return new FundDetailEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getCreateTime(), fundDetail.getUpdateTime());
+        return new FundDetailEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime());
     }
 
     public FundDetail toDomain() {
-        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), createTime, updateTime);
+        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), comment, createTime, updateTime);
     }
 }

@@ -24,8 +24,8 @@ public class PayInfoService {
 
     private final FundDetailService fundDetailService;
 
-    public void uploadFundDetail(int category, LocalDate addTime, String amount) {
-        FundDetail fundDetail = FundDetail.of(CategoryEnum.of(category), addTime, Money.of(amount));
+    public void uploadFundDetail(int category, LocalDate addTime, String amount, String comment) {
+        FundDetail fundDetail = FundDetail.of(CategoryEnum.of(category), addTime, Money.of(amount), comment);
         fundDetailService.uploadFundDetail(fundDetail);
     }
 

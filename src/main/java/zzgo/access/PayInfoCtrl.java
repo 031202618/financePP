@@ -22,8 +22,9 @@ public class PayInfoCtrl {
     public void uploadFundDetail(
             @RequestParam("category") int category,
             @RequestParam("addTime") LocalDate addTime,
-            @RequestParam("amount") String amount){
-        payInfoService.uploadFundDetail(category, addTime, amount);
+            @RequestParam("amount") String amount,
+    @RequestParam("comment") String comment){
+        payInfoService.uploadFundDetail(category, addTime, amount, comment);
     }
 
     @GetMapping("/fundDetails")

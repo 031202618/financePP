@@ -23,17 +23,23 @@
                     <div class="mb-3">
                         <label for="category" class="col-form-label">分类</label>
                         <select class="form-select" aria-label="Default select example" id="category" name="category">
-                            <option value="1">基金</option>
-                            <option value="2">股票</option>
-                            <option value="3">债券</option>
-                            <option value="4">黄金</option>
-                            <option value="5">生活</option>
-                            <option value="6">玩乐</option>
+                            <option value="1001">基金</option>
+                            <option value="1002">股票</option>
+                            <option value="1003">债券</option>
+                            <option value="1004">黄金</option>
+                            <option value="1005">理财空置</option>
+                            <option value="2001">生活</option>
+                            <option value="3001">玩乐</option>
+                            <option value="4001">公积金</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="amount" class="col-form-label">金额</label>
                         <input type="number" class="form-control" id="amount" name="amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="col-form-label">注释</label>
+                        <input type="text" class="form-control" id="comment" name="comment">
                     </div>
                 </form>
             </div>
@@ -59,9 +65,11 @@
     <table class="table">
         <thead>
         <tr>
+            <th scope="col">id</th>
             <th scope="col">添加时间</th>
             <th scope="col">分类</th>
             <th scope="col">金额</th>
+            <th scope="col">注释</th>
             <th scope="col">创建时间</th>
             <th scope="col">修改时间</th>
             <th scope="col">操作</th>
@@ -69,9 +77,11 @@
         </thead>
         <tbody>
         <tr th:each="detail : ${fundDetails}">
+            <td th:text="${detail.id}"></td>
             <td th:text="${detail.addTime}"></td>
             <td th:text="${detail.category.getDesc()}"></td>
             <td th:text="${detail.amount.toAmount()}"></td>
+            <td th:text="${detail.comment}"></td>
             <td th:text="${detail.createTime}"></td>
             <td th:text="${detail.updateTime}"></td>
             <td>

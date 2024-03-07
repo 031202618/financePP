@@ -21,11 +21,12 @@ public class FundDetail {
     private CategoryEnum category;
     private LocalDate addTime;
     private Money amount;
+    private String comment;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount){
-        return new FundDetail(0, category, addTime, amount, LocalDateTime.now(), LocalDateTime.now());
+    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment){
+        return new FundDetail(0, category, addTime, amount, comment, LocalDateTime.now(), LocalDateTime.now());
     }
 
 }

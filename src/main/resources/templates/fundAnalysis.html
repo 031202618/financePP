@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财务分析</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <script th:src="@{/js/echarts.min.js}"></script>
+</head>
+<body>
+<!-- 饼图的容器 -->
+<!-- 所有-->
+<div id="all" style="width: 600px;height:400px;margin: 0 auto"></div>
+<!-- 理财-->
+<div id="stock" style="width: 600px;height:400px;margin: 0 auto"></div>
+<script  type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script>
+    function stock(stockList){
+        var chartDom = document.getElementById('stock');
+        var myChart = echarts.init(chartDom);
+        var option;
+        var allData = []
+        $.each(stockList, function (index, value){
+            allData.push({value: parseFloat(value.amount),name: value.category + ':' + value.comment});
+            value.category;
+            value.amount;
+            value.comment;
+        })
+        // 计算总和
+        var total = allData.reduce(function (sum, item) {
+            return sum + item.value;
+        }, 0);
+        option = {
+            title: {
+                text: '理财组成',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '资金分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 调整饼图的内外半径来腾出显示总和的空间
+                    data: allData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'center',
+                            formatter: '总计\n{total|' + total + '}', // 格式化标签显示内容
+                            rich: {
+                                total: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    }
+</script>
+<script>
+    function total(module2Money){
+        var chartDom = document.getElementById('all');
+        var myChart = echarts.init(chartDom);
+        var option;
+        var allData = []
+        $.each(module2Money, function (k, v){
+            allData.push({value: parseFloat(v), name: k})
+        })
+        // 计算总和
+        var total = allData.reduce(function (sum, item) {
+            return sum + item.value;
+        }, 0);
+
+        option = {
+            title: {
+                text: '财务概览',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '资金分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 调整饼图的内外半径来腾出显示总和的空间
+                    data: allData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'center',
+                            formatter: '总计\n{total|' + total + '}', // 格式化标签显示内容
+                            rich: {
+                                total: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    }
+</script>
+<script>
+    $.ajax({
+        url: 'http://localhost:80/payAnalysis/info?year=2024&month=3',
+        method: 'GET',
+        async: false,
+        error: function(request) {
+            alert("出错啦！！！");
+        },
+        success: function(data) {
+            total(data.module2Money);
+            stock(data.stockList);
+        }
+    })
+
+</script>
+</body>
+</html>

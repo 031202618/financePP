@@ -17,8 +17,12 @@ public record Money(
         return new Money(new BigDecimal(amount).multiply(BigDecimal.valueOf(100)).intValue());
     }
 
+    public static Money zero(){
+        return new Money(0);
+    }
+
     public String toString(){
-        return amount / 100.0 + "¥";
+        return amount / 100.0 + "";
     }
 
     public String toAmount(){
