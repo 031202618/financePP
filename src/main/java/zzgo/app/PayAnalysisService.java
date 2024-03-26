@@ -2,7 +2,7 @@ package zzgo.app;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import zzgo.app.vo.PayAnalysisVo;
+import zzgo.app.vo.PayAnalysisVO;
 import zzgo.domain.FundDetail;
 import zzgo.domain.FundDetailService;
 import zzgo.domain.util.Money;
@@ -20,7 +20,7 @@ public class PayAnalysisService {
 
     private final FundDetailService fundDetailService;
 
-    public PayAnalysisVo getPayAnalysisVo(int year, int month) {
+    public PayAnalysisVO getPayAnalysisVo(int year, int month) {
         List<FundDetail> fundDetails = fundDetailService.getAll().stream()
                 .sorted(Comparator.comparing(FundDetail::getAddTime))
                 .filter(fundDetail -> {
@@ -34,10 +34,10 @@ public class PayAnalysisService {
                     Money money = entry.getValue().stream().map(FundDetail::getAmount).reduce(Money::add).orElse(Money.zero());
                     return new AbstractMap.SimpleEntry<>(entry.getKey(), money.toString());
                 }).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-        return new PayAnalysisVo(
+        return new PayAnalysisVO(
                 module2Money,
                 fundDetails.stream().filter(x -> x.getCategory().isStock())
-                        .map(x -> new PayAnalysisVo.StockInfo(x.getCategory().getDesc(), x.getAmount().toAmount(), x.getComment()))
+                        .map(x -> new PayAnalysisVO.StockInfo(x.getCategory().getDesc(), x.getAmount().toAmount(), x.getComment()))
                         .toList()
         );
     }

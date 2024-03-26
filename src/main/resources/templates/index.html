@@ -55,11 +55,15 @@
     var year = currentDate.getFullYear();
     var detailUrl = 'http://localhost/payInfo/fundDetails' + '?year=' + year + '&month=' + month;
     var analysisUrl = 'http://localhost/payAnalysis';
+    var trendUrl = 'http://localhost/payTrend';
     document.getElementById("detailBtn").onclick = function () {
         location.href = detailUrl
     };
     document.getElementById("analysisBtn").onclick = function () {
         location.href = analysisUrl
+    };
+    document.getElementById("trendBtn").onclick = function () {
+        location.href = trendUrl
     };
 </script>
 <script>

@@ -10,6 +10,7 @@ build/
 .idea/compiler.xml
 .idea/libraries/
 .idea/sonarlint/
+.idea/jpa.xml
 *.iws
 *.iml
 *.ipr

@@ -5,9 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import zzgo.app.PayAnalysisService;
-import zzgo.app.vo.PayAnalysisVo;
+import zzgo.app.vo.PayAnalysisVO;
 
 @Controller
 @RequestMapping("/payAnalysis")
@@ -23,7 +22,7 @@ public class PayAnalysisCtrl {
 
     @GetMapping("/info")
     @ResponseBody
-    public PayAnalysisVo getPayAnalysisVo(int year, int month){
+    public PayAnalysisVO getPayAnalysisVo(int year, int month){
         return service.getPayAnalysisVo(year, month);
     }
 

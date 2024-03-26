@@ -33,7 +33,7 @@ public class FundDetailEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime recordTime;
     @Column
-    private int amount;
+    private long amount;
     @Column
     private String comment;
     @Temporal(TemporalType.TIMESTAMP)

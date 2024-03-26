@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财务趋势</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <script th:src="@{/js/echarts.min.js}"></script>
+</head>
+<body>
+<div class="row g-3">
+    <div class="col-auto">
+        <label for="startTime" class="form-label">开始时间选择</label>
+        <input type="month" class="form-control" id="startTime">
+    </div>
+    <div class="col-auto">
+        <label for="endTime" class="form-label">结束时间选择</label>
+        <input type="month" class="form-control" id="endTime">
+    </div>
+    <div class="col-auto">
+        <button onclick="searchGraph()" class="btn btn-primary mb-3">查询</button>
+    </div>
+</div>
+<div>
+    <p id="totalMoneyFullRate">总金额整体增长率(末月-首月 / 首月)</p>
+    <p id="totalMoneyMonthRate">总金额累计增长率(月增长之和)</p>
+    <p>总金额折线图</p>
+    <!--    <div id="1" style="width: 1200px;height:800px;margin: 0 auto"></div>-->
+    <p id="stockMoneyFullRate">理财整体增长率(末月-首月 / 首月)</p>
+    <p id="stockMoneyMonthRate">理财累计增长率(月增长之和)</p>
+    <p>理财折线图</p>
+    <!--    <div id="2" style="width: 1200px;height:800px;margin: 0 auto"></div>-->
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script>
+    function stock(stockList) {
+        var chartDom = document.getElementById('stock');
+        var myChart = echarts.init(chartDom);
+        var option;
+        var tmp = {}
+        $.each(stockList, function (index, value) {
+            var amount = tmp[value.category];
+            if (amount == null) {
+                tmp[value.category] = parseFloat(value.amount)
+            } else {
+                tmp[value.category] = amount + parseFloat(value.amount)
+            }
+        })
+        allData = []
+        $.each(tmp, function (k, v) {
+            allData.push({value: v, name: k})
+        })
+        // 计算总和
+        var total = allData.reduce(function (sum, item) {
+            return sum + item.value;
+        }, 0).toFixed(2);
+        option = {
+            title: {
+                text: '理财组成',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '资金分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 调整饼图的内外半径来腾出显示总和的空间
+                    data: allData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'center',
+                            formatter: '总计\n{total|' + total + '}', // 格式化标签显示内容
+                            rich: {
+                                total: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    }
+</script>
+<script>
+    function stockDetail(stockList) {
+        var chartDom = document.getElementById('stockDetail');
+        var myChart = echarts.init(chartDom);
+        var option;
+        var allData = []
+        $.each(stockList, function (index, value) {
+            allData.push({
+                value: parseFloat(value.amount),
+                name: value.category + ':' + value.comment
+            });
+        })
+        // 计算总和
+        var total = allData.reduce(function (sum, item) {
+            return sum + item.value;
+        }, 0).toFixed(2);
+        option = {
+            title: {
+                text: '理财概览',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '资金分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 调整饼图的内外半径来腾出显示总和的空间
+                    data: allData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'center',
+                            formatter: '总计\n{total|' + total + '}', // 格式化标签显示内容
+                            rich: {
+                                total: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    }
+</script>
+<script>
+    function total(module2Money) {
+        var chartDom = document.getElementById('all');
+        var myChart = echarts.init(chartDom);
+        var option;
+        var allData = []
+        $.each(module2Money, function (k, v) {
+            allData.push({value: parseFloat(v), name: k})
+        })
+        // 计算总和
+        var total = allData.reduce(function (sum, item) {
+            return sum + item.value;
+        }, 0).toFixed(2);
+
+        option = {
+            title: {
+                text: '财务概览',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '资金分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 调整饼图的内外半径来腾出显示总和的空间
+                    data: allData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'center',
+                            formatter: '总计\n{total|' + total + '}', // 格式化标签显示内容
+                            rich: {
+                                total: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    }
+</script>
+<script>
+    function showTotalMoney(data) {
+        document.getElementById("totalMoneyFullRate").textContent = '总金额整体增长率(末月-首月 / 首月) ---> ' + (data.totalMoneyFullRate + '%')
+        document.getElementById("totalMoneyMonthRate").textContent = '总金额累计增长率(月增长之和) ---> ' + (data.totalMoneyMonthRate + '%')
+        document.getElementById("stockMoneyFullRate").textContent = '理财整体增长率(末月-首月 / 首月) ---> ' + (data.stockMoneyFullRate + '%')
+        document.getElementById("stockMoneyMonthRate").textContent = '理财累计增长率(月增长之和) ---> ' + (data.stockMoneyMonthRate + '%')
+    }
+</script>
+<script>
+    function showGraph(startTime, endTime) {
+        var url = 'startTime=' + startTime + '&' + 'endTime=' + endTime
+        $.ajax({
+            url: 'http://localhost:80/payTrend/info?' + url,
+            method: 'GET',
+            async: false,
+            error: function (request) {
+                alert("出错啦！！！");
+            },
+            success: function (data) {
+                showTotalMoney(data);
+                // showTotalGraph(data.totalMoney);
+                // showTotalGraph(data.stockMoney);
+            }
+        })
+    }
+
+    function searchGraph() {
+        var startTime = document.getElementById('startTime').value
+        var endTime = document.getElementById('endTime').value
+        showGraph(startTime, endTime)
+    }
+</script>
+<script>
+    <!--    init  -->
+    var currentDate = new Date();
+    var startTime, endTime;
+    if (currentDate.getMonth() == 1) {
+        startTime = (currentDate.getFullYear() - 1) + '-' + 12;
+        endTime = currentDate.getFullYear() + '-01';
+    } else {
+        startTime = (currentDate.getFullYear()) + '-' + String(currentDate.getMonth()).padStart(2, '0');
+        endTime = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0');
+    }
+    document.getElementById('startTime').value = startTime
+    document.getElementById('endTime').value = endTime
+    showGraph(startTime, endTime)
+</script>
+</body>
+</html>

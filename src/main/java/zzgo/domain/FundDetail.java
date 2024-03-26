@@ -8,6 +8,7 @@ import zzgo.domain.util.Money;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 /**
  * @author zhengw
@@ -25,8 +26,16 @@ public class FundDetail {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment){
+    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment) {
         return new FundDetail(0, category, addTime, amount, comment, LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public YearMonth getYearMonth() {
+        return YearMonth.of(addTime.getYear(), addTime.getMonth());
+    }
+
+    public boolean isStock() {
+        return category.isStock();
     }
 
 }
