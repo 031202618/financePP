@@ -10,16 +10,17 @@ import java.util.List;
  * @since 2024-03-25 21:25
  */
 public record PayTrendVO(
-        int totalMoneyFullRate,
-        int totalMoneyMonthRate,
-        int stockMoneyFullRate,
-        int stockMoneyMonthRate,
+        double totalMoneyFullRate,
+        double totalMoneyMonthRate,
+        double stockMoneyFullRate,
+        double stockMoneyMonthRate,
         List<TrendDetail> totalMoney,
         List<TrendDetail> stockMoney
 ) {
     public record TrendDetail(
             Money money,
-            int rate,
+            Money stackMoney,
+            double rate,
             YearMonth ym
     ) {
     }

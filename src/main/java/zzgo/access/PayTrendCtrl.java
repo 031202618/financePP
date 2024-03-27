@@ -26,7 +26,7 @@ public class PayTrendCtrl {
     @GetMapping("/info")
     @ResponseBody
     public PayTrendVO getPayAnalysisVo(@RequestParam YearMonth startTime, @RequestParam YearMonth endTime) {
-        return service.getPayAnalysisVo(startTime, endTime);
+        return service.getPayTrendVo(startTime, endTime);
     }
 
 }

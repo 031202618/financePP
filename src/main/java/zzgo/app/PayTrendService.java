@@ -7,6 +7,7 @@ import zzgo.app.vo.PayTrendVO;
 import zzgo.domain.FundDetail;
 import zzgo.domain.FundDetailService;
 import zzgo.domain.util.FundUtil;
+import zzgo.domain.util.Money;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -19,7 +20,7 @@ public class PayTrendService {
 
     private final FundDetailService fundDetailService;
 
-    public PayTrendVO getPayAnalysisVo(YearMonth startYM, YearMonth endYM) {
+    public PayTrendVO getPayTrendVo(YearMonth startYM, YearMonth endYM) {
         LocalDate startTime = LocalDate.of(startYM.getYear(), startYM.getMonth(), 1);
         LocalDate endTime = LocalDate.of(endYM.getYear(), endYM.getMonth(), 1).plusMonths(1).minusDays(1);
         var ym2Date2Fund = fundDetailService.getAll().stream()
@@ -32,10 +33,10 @@ public class PayTrendService {
     }
 
     private PayTrendVO buildPayTrendVO(List<List<FundDetail>> totalFund, List<Pair<List<FundDetail>, List<FundDetail>>> stockFund) {
-        int totalMoneyFullRate;
-        int totalMoneyMonthRate;
-        int stockMoneyFullRate;
-        int stockMoneyMonthRate;
+        double totalMoneyFullRate;
+        double totalMoneyMonthRate;
+        double stockMoneyFullRate;
+        double stockMoneyMonthRate;
         List<PayTrendVO.TrendDetail> totalMoney = new ArrayList<>();
         List<PayTrendVO.TrendDetail> stockMoney = new ArrayList<>();
         if (totalFund.size() < 2) {
@@ -53,16 +54,16 @@ public class PayTrendService {
         for (int i = 0; i < totalFund.size(); i++) {
             List<FundDetail> fundDetails = totalFund.get(i);
             if (i == totalFund.size() - 1) {
-                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), 0, fundDetails.get(0).getYearMonth()));
+                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), Money.zero(), 0, fundDetails.get(0).getYearMonth()));
             } else {
-                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), FundUtil.calcRate(fundDetails, totalFund.get(i + 1)), fundDetails.get(0).getYearMonth()));
+                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), FundUtil.getTotalMoney(totalFund.get(i + 1)).subtract(FundUtil.getTotalMoney(fundDetails)), FundUtil.calcRate(fundDetails, totalFund.get(i + 1)), fundDetails.get(0).getYearMonth()));
             }
         }
-        totalMoneyMonthRate = totalMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0, Integer::sum);
+        totalMoneyMonthRate = totalMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         for (Pair<List<FundDetail>, List<FundDetail>> fundPair : stockFund) {
-            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey()), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getYearMonth()));
+            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getYearMonth()));
         }
-        stockMoneyMonthRate = stockMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0, Integer::sum);
+        stockMoneyMonthRate = stockMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         return new PayTrendVO(totalMoneyFullRate, totalMoneyMonthRate, stockMoneyFullRate, stockMoneyMonthRate, totalMoney, stockMoney);
     }
 

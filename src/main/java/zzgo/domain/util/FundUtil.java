@@ -13,7 +13,7 @@ public class FundUtil {
         return details.stream().map(FundDetail::getAmount).reduce(Money.zero(), Money::add);
     }
 
-    public static int calcRate(List<FundDetail> fund1, List<FundDetail> fund2) {
+    public static double calcRate(List<FundDetail> fund1, List<FundDetail> fund2) {
         Money money2 = getTotalMoney(fund2);
         Money money1 = getTotalMoney(fund1);
         return money2.subtract(money1).multiply(100).divide(money1);

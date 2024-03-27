@@ -8,10 +8,7 @@ import zzgo.domain.FundDetailService;
 import zzgo.domain.util.Money;
 
 import java.time.LocalDate;
-import java.util.AbstractMap;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +25,11 @@ public class PayAnalysisService {
                     return addTime.getYear() == year && addTime.getMonthValue() == month;
                 })
                 .toList();
+        if (fundDetails.isEmpty()) {
+            return new PayAnalysisVO(Collections.emptyMap(), Collections.emptyList());
+        }
+        LocalDate maxDate = fundDetails.stream().map(FundDetail::getAddTime).max(LocalDate::compareTo).get();
+        fundDetails = fundDetails.stream().filter(x -> x.getAddTime().equals(maxDate)).toList();
         Map<String, String> module2Money = fundDetails.stream().collect(Collectors.groupingBy(x -> x.getCategory().getModule())).entrySet()
                 .stream()
                 .map(entry -> {

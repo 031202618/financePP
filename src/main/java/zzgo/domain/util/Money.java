@@ -42,11 +42,11 @@ public record Money(
     }
 
     public Money divide(int num) {
-        return new Money(BigDecimal.valueOf(this.amount).divide(BigDecimal.valueOf(num), 0, DEFAULT_ROUNDING_MODE).intValue());
+        return new Money(BigDecimal.valueOf(this.amount).divide(BigDecimal.valueOf(num), 0, DEFAULT_ROUNDING_MODE).longValue());
     }
 
-    public int divide(Money money) {
-        return BigDecimal.valueOf(this.amount).divide(BigDecimal.valueOf(money.amount), 0, DEFAULT_ROUNDING_MODE).intValue();
+    public double divide(Money money) {
+        return BigDecimal.valueOf(this.amount).divide(BigDecimal.valueOf(money.amount), 2, DEFAULT_ROUNDING_MODE).doubleValue();
     }
 
 }

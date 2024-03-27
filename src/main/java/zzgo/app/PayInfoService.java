@@ -7,11 +7,8 @@ import zzgo.domain.FundDetailService;
 import zzgo.domain.enums.CategoryEnum;
 import zzgo.domain.util.Money;
 import zzgo.domain.util.Time;
-import zzgo.infra.entity.FundDetailEntity;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -31,7 +28,7 @@ public class PayInfoService {
 
     public List<FundDetail> listFundDetails(Integer year, Integer quarter, Integer month) {
         return fundDetailService.getAll().stream()
-                .sorted(Comparator.comparing(FundDetail::getAddTime))
+                .sorted((x, y) -> y.getAddTime().compareTo(x.getAddTime()))
                 .filter(fundDetail -> {
                     LocalDate addTime = fundDetail.getAddTime();
                     return (year == null || addTime.getYear() == year) &&
