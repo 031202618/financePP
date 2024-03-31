@@ -25,15 +25,27 @@
     <div id="totalMoneyFullRate" class="alert alert-success" role="alert">
         总金额整体增长率(末月-首月 / 首月)
     </div>
+    <div id="totalMoneyFullYearRate" class="alert alert-success" role="alert">
+        总金额整体预计年增长率(末月-首月 / 首月 / 相差天数 * 365)
+    </div>
     <div id="totalMoneyMonthRate" class="alert alert-warning" role="alert">
         总金额累计增长率(月增长之和)
+    </div>
+    <div id="totalMoneyMonthYearRate" class="alert alert-warning" role="alert">
+        总金额累计预计年增长率(月增长之和 / 相差天数 * 365)
     </div>
     <div id="totalMoneyTrend" style="width: 1200px;height:800px;margin: 0 auto"></div>
     <div id="stockMoneyFullRate" class="alert alert-success" role="alert">
         理财整体增长率(末月-首月 / 首月)
     </div>
+    <div id="stockMoneyFullYearRate" class="alert alert-success" role="alert">
+        理财整体预计年增长率(末月-首月 / 首月 / 相差天数 * 365)
+    </div>
     <div id="stockMoneyMonthRate" class="alert alert-warning" role="alert">
         理财累计增长率(月增长之和)
+    </div>
+    <div id="stockMoneyMonthYearRate" class="alert alert-warning" role="alert">
+        理财累计预计年增长率(月增长之和 / 相差天数 * 365)
     </div>
     <div id="stockMoneyTrend" style="width: 1200px;height:800px;margin: 0 auto"></div>
 </div>
@@ -49,7 +61,7 @@
         var moneyList = []
         var stackMoneyList = []
         $.each(trend, function (index, data) {
-            ym.push(data.ym);
+            ym.push(data.date);
             if (data.rate == 0) {
                 percentList.push('-')
             } else {
@@ -151,9 +163,13 @@
 <script>
     function showTotalMoney(data) {
         document.getElementById("totalMoneyFullRate").textContent = '总金额整体增长率(末月-首月 / 首月) ---> ' + (data.totalMoneyFullRate.toFixed(2) + '%')
+        document.getElementById("totalMoneyFullYearRate").textContent = '总金额整体预计年增长率(末月-首月 / 首月 / 相差天数 * 365) ---> ' + (data.totalMoneyFullYearRate.toFixed(2) + '%')
         document.getElementById("totalMoneyMonthRate").textContent = '总金额累计增长率(月增长之和) ---> ' + (data.totalMoneyMonthRate.toFixed(2) + '%')
+        document.getElementById("totalMoneyMonthYearRate").textContent = '总金额累计预计年增长率(月增长之和 / 相差天数 * 365) ---> ' + (data.totalMoneyMonthYearRate.toFixed(2) + '%')
         document.getElementById("stockMoneyFullRate").textContent = '理财整体增长率(末月-首月 / 首月) ---> ' + (data.stockMoneyFullRate.toFixed(2) + '%')
+        document.getElementById("stockMoneyFullYearRate").textContent = '理财整体预计年增长率(末月-首月 / 首月 / 相差天数 * 365) ---> ' + (data.stockMoneyFullYearRate.toFixed(2) + '%')
         document.getElementById("stockMoneyMonthRate").textContent = '理财累计增长率(月增长之和) ---> ' + (data.stockMoneyMonthRate.toFixed(2) + '%')
+        document.getElementById("stockMoneyMonthYearRate").textContent = '理财累计增长率(月增长之和) ---> ' + (data.stockMoneyMonthYearRate.toFixed(2) + '%')
     }
 </script>
 <script>

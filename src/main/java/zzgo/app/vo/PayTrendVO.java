@@ -2,7 +2,7 @@ package zzgo.app.vo;
 
 import zzgo.domain.util.Money;
 
-import java.time.YearMonth;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -11,9 +11,13 @@ import java.util.List;
  */
 public record PayTrendVO(
         double totalMoneyFullRate,
+        double totalMoneyFullYearRate,
         double totalMoneyMonthRate,
+        double totalMoneyMonthYearRate,
         double stockMoneyFullRate,
+        double stockMoneyFullYearRate,
         double stockMoneyMonthRate,
+        double stockMoneyMonthYearRate,
         List<TrendDetail> totalMoney,
         List<TrendDetail> stockMoney
 ) {
@@ -21,7 +25,7 @@ public record PayTrendVO(
             Money money,
             Money stackMoney,
             double rate,
-            YearMonth ym
+            LocalDate date
     ) {
     }
 }
