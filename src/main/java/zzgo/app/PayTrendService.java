@@ -6,13 +6,17 @@ import org.springframework.stereotype.Service;
 import zzgo.app.vo.PayTrendVO;
 import zzgo.domain.FundDetail;
 import zzgo.domain.FundDetailService;
+import zzgo.domain.enums.CategoryEnum;
 import zzgo.domain.util.FundUtil;
 import zzgo.domain.util.Money;
 import zzgo.domain.util.Time;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,7 +114,7 @@ public class PayTrendService {
             stockFund.add(
                     Pair.of(
                             date2Details.entrySet().stream().max(Map.Entry.comparingByKey()).map(Map.Entry::getValue).get().stream().filter(FundDetail::isStock).toList(),
-                            nextMonth.entrySet().stream().min(Map.Entry.comparingByKey()).map(Map.Entry::getValue).get().stream().filter(FundDetail::isStock).toList()
+                            nextMonth.entrySet().stream().min(Map.Entry.comparingByKey()).map(Map.Entry::getValue).get().stream().filter(FundDetail::isStock).filter(fundDetail -> fundDetail.getCategory() != CategoryEnum.LQKZ_GZ).toList()
                     )
             );
         });
@@ -122,13 +126,13 @@ public class PayTrendService {
         if (ym2Date2Fund.isEmpty()) {
             return Collections.emptyList();
         }
-        YearMonth maxYearMonth = ym2Date2Fund.keySet().stream().max(YearMonth::compareTo).get();
+//        YearMonth maxYearMonth = ym2Date2Fund.keySet().stream().max(YearMonth::compareTo).get();
         ym2Date2Fund.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
             Map<LocalDate, List<FundDetail>> date2Details = entry.getValue();
-            Set<LocalDate> localDates = date2Details.keySet();
-            if (localDates.size() == 1 && entry.getKey().equals(maxYearMonth)) {
-                return;
-            }
+//            Set<LocalDate> localDates = date2Details.keySet();
+//            if (localDates.size() == 1 && entry.getKey().equals(maxYearMonth)) {
+//                return;
+//            }
             totalFund.add(date2Details.entrySet().stream().max(Map.Entry.comparingByKey()).map(Map.Entry::getValue).get());
         });
         return totalFund;

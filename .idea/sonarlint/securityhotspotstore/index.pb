@@ -58,3 +58,11 @@ Y
 ,src/main/java/zzgo/app/vo/PayAnalysisVO.java,b\3\b3689343232d231afc724196b164f01969fc1aa2
 \
 ,src/main/java/zzgo/domain/util/FundUtil.java,d\6\d611ea3713e50386edaaea3df2d4a0d723dba72c
+[
++src/main/resources/templates/fundTrend.html,a\2\a2c834dc7798e87bbfa198ae588cf6eba6a038cf
+W
+'src/main/resources/templates/index.html,c\4\c4d2f13df3643ad7f9a42f7eb5462518cbeba268
+\
+,src/main/resources/templates/fundDetail.html,a\9\a9d8266c1322c7ff88eea0d97379e3a9e81f9fd1
+^
+.src/main/resources/templates/fundAnalysis.html,5\e\5e50188d752de28d3964588cdeddf38cce9a7770

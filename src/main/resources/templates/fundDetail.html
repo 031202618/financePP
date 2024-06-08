@@ -7,12 +7,14 @@
 </head>
 <body>
 <!--复用组件-->
-<div class="modal fade" id="newFundDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newFundDetails" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">新增资金记录</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="insertForm">
@@ -22,12 +24,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="category" class="col-form-label">分类</label>
-                        <select class="form-select" aria-label="Default select example" id="category" name="category">
+                        <select class="form-select" aria-label="Default select example"
+                                id="category" name="category">
                             <option value="1001">基金</option>
                             <option value="1002">股票</option>
                             <option value="1003">债券</option>
                             <option value="1004">黄金</option>
                             <option value="1005">理财空置</option>
+                            <option value="1006">理财空置-工资</option>
                             <option value="2001">生活</option>
                             <option value="3001">玩乐</option>
                             <option value="4001">公积金</option>
@@ -44,8 +48,11 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" onclick="insert()" data-bs-dismiss="modal">新增</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" onclick="insert()"
+                        data-bs-dismiss="modal">新增
+                </button>
             </div>
         </div>
     </div>
@@ -55,10 +62,15 @@
 <div class="container text-center">
     <nav class="navbar bg-body-tertiary">
         <form class="d-flex" role="search" th:action="@{/payInfo/fundDetails}">
-            <button class="btn btn-outline-success me-5 btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#newFundDetails" data-bs-whatever="@mdo">新增资金记录</button>
-            <input class="form-control me-5" type="search" placeholder="年份(e.g: 2024)" aria-label="Search" name="year">
-            <input class="form-control me-5" type="search" placeholder="季度(1/2/3/4)" aria-label="Search" name="quarter">
-            <input class="form-control me-5" type="search" placeholder="月份(1-12)" aria-label="Search" name="month">
+            <button class="btn btn-outline-success me-5 btn-lg" type="button" data-bs-toggle="modal"
+                    data-bs-target="#newFundDetails" data-bs-whatever="@mdo">新增资金记录
+            </button>
+            <input class="form-control me-5" type="search" placeholder="年份(e.g: 2024)"
+                   aria-label="Search" name="year">
+            <input class="form-control me-5" type="search" placeholder="季度(1/2/3/4)"
+                   aria-label="Search" name="quarter">
+            <input class="form-control me-5" type="search" placeholder="月份(1-12)"
+                   aria-label="Search" name="month">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </nav>
@@ -85,7 +97,9 @@
             <td th:text="${detail.createTime}"></td>
             <td th:text="${detail.updateTime}"></td>
             <td>
-                <button type="button" class="btn btn-danger btn-sm" onclick="deleteFund(this)" th:value="${detail.id}">删除</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteFund(this)"
+                        th:value="${detail.id}">删除
+                </button>
             </td>
         </tr>
         </tbody>
@@ -93,8 +107,8 @@
     <!-- Content here -->
 </div>
 <!--结束-->
-<script  type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-<script  type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
 <script>
     var currentDate = new Date();
     var day = String(currentDate.getDate()).padStart(2, '0');
@@ -104,31 +118,31 @@
     document.getElementById("addTime").value = dateString;
 </script>
 <script>
-    function insert(){
+    function insert() {
         $.ajax({
             url: 'http://localhost:80/payInfo/fundDetail',
             method: 'POST',
-            data:$('#insertForm').serialize(),
+            data: $('#insertForm').serialize(),
             async: false,
-            error: function(request) {
+            error: function (request) {
                 alert("出错啦！！！");
             },
-            success: function(data) {
+            success: function (data) {
                 alert("添加成功， 距离财富自由又近一步啦。");
                 location.reload();
             }
         })
     }
 
-    function deleteFund(val){
+    function deleteFund(val) {
         $.ajax({
             url: 'http://localhost:80/payInfo/fundDetail?id=' + val.value,
             method: 'DELETE',
             async: false,
-            error: function(request) {
+            error: function (request) {
                 alert("出错啦！！！");
             },
-            success: function(data) {
+            success: function (data) {
                 alert("删除成功");
                 location.reload();
             }
