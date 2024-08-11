@@ -22,8 +22,13 @@ public class PayInfoService {
     private final FundDetailService fundDetailService;
 
     public void uploadFundDetail(int category, LocalDate addTime, String amount, String comment) {
-        FundDetail fundDetail = FundDetail.of(CategoryEnum.of(category), addTime, Money.of(amount), comment);
+        FundDetail fundDetail = FundDetail.of(CategoryEnum.of(category), addTime, Money.of(amount), comment, 0);
         fundDetailService.uploadFundDetail(fundDetail);
+    }
+
+    public void uploadFundDetail(int id, int category, LocalDate addTime, String amount, String comment) {
+        FundDetail fundDetail = FundDetail.of(CategoryEnum.of(category), addTime, Money.of(amount), comment, 0);
+        fundDetailService.uploadFundDetail(id, fundDetail);
     }
 
     public List<FundDetail> listFundDetails(Integer year, Integer quarter, Integer month) {
@@ -35,6 +40,7 @@ public class PayInfoService {
                             (quarter == null || Time.month2Quarter(addTime.getMonthValue()) == quarter) &&
                             (month == null || month == addTime.getMonthValue());
                 })
+                .filter(fundDetail -> !fundDetail.isSnapshot())
                 .toList();
     }
 

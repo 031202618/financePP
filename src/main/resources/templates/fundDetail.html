@@ -57,6 +57,57 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateFundDetails" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">修改资金记录</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                    <input hidden="hidden" id="updateId" name="updateId">
+                    <div class="mb-3">
+                        <label for="updateAddTime" class="col-form-label">添加时间</label>
+                        <input type="date" class="form-control" id="updateAddTime" name="addTime"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateCategory" class="col-form-label">分类</label>
+                        <select class="form-select" aria-label="Default select example"
+                                id="updateCategory" name="category">
+                            <option value="1001">基金</option>
+                            <option value="1002">股票</option>
+                            <option value="1003">债券</option>
+                            <option value="1004">黄金</option>
+                            <option value="1005">理财空置</option>
+                            <option value="1006">理财空置-工资</option>
+                            <option value="2001">生活</option>
+                            <option value="3001">玩乐</option>
+                            <option value="4001">公积金</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateAmount" class="col-form-label">金额</label>
+                        <input type="number" class="form-control" id="updateAmount" name="amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateComment" class="col-form-label">注释</label>
+                        <input type="text" class="form-control" id="updateComment" name="comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" onclick="update()"
+                        data-bs-dismiss="modal">更新
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--开始-->
 <div class="container text-center">
@@ -97,6 +148,12 @@
             <td th:text="${detail.createTime}"></td>
             <td th:text="${detail.updateTime}"></td>
             <td>
+                <button type="button" class="btn btn-dark btn-sm" onclick="showFund(this)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateFundDetails"
+                        th:value="${detail.id} + '|' + ${detail.addTime} + '|' + ${detail.category.id} + '|' + ${detail.amount.toAmount()} + '|' + ${detail.comment}">
+                    编辑
+                </button>
                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteFund(this)"
                         th:value="${detail.id}">删除
                 </button>
@@ -117,6 +174,16 @@
     var dateString = year + '-' + month + '-' + day;
     document.getElementById("addTime").value = dateString;
 </script>
+<script th:inline="javascript">
+    function showFund(val) {
+        var arr = val.value.split("|");
+        document.getElementById("updateId").value = arr[0];
+        document.getElementById("updateAddTime").value = arr[1];
+        document.getElementById("updateCategory").value = arr[2];
+        document.getElementById("updateAmount").value = arr[3];
+        document.getElementById("updateComment").value = arr[4];
+    }
+</script>
 <script>
     function insert() {
         $.ajax({
@@ -129,6 +196,23 @@
             },
             success: function (data) {
                 alert("添加成功， 距离财富自由又近一步啦。");
+                location.reload();
+            }
+        })
+    }
+
+    function update() {
+        id = document.getElementById("updateId").value
+        $.ajax({
+            url: 'http://localhost:80/payInfo/fundDetail/' + id,
+            method: 'POST',
+            data: $('#updateForm').serialize(),
+            async: false,
+            error: function (request) {
+                alert("出错啦！！！");
+            },
+            success: function (data) {
+                alert("修改成功， 距离财富自由又近一步啦。");
                 location.reload();
             }
         })

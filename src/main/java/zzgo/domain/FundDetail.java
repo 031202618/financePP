@@ -25,9 +25,10 @@ public class FundDetail {
     private String comment;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private int version;
 
-    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment) {
-        return new FundDetail(0, category, addTime, amount, comment, LocalDateTime.now(), LocalDateTime.now());
+    public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment, int version) {
+        return new FundDetail(0, category, addTime, amount, comment, LocalDateTime.now(), LocalDateTime.now(), version);
     }
 
     public YearMonth getYearMonth() {
@@ -38,4 +39,15 @@ public class FundDetail {
         return category.isStock();
     }
 
+    public boolean isSnapshot() {
+        return version != 0;
+    }
+
+    public void snapshot() {
+        this.version++;
+    }
+
+    public void copyCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
 }

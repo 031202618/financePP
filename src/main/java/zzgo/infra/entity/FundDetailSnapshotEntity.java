@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import zzgo.domain.FundDetail;
-import zzgo.domain.enums.CategoryEnum;
-import zzgo.domain.util.Money;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,11 +18,11 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@SQLDelete(sql = "UPDATE fund_detail SET delete_time = NOW() WHERE id = ? ")
+@SQLDelete(sql = "UPDATE fund_detail_snapshot SET delete_time = NOW() WHERE id = ? ")
 @Where(clause = "delete_time is null")
 @Entity
-@Table(name = "fund_detail")
-public class FundDetailEntity {
+@Table(name = "fund_detail_snapshot")
+public class FundDetailSnapshotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -42,12 +40,10 @@ public class FundDetailEntity {
     private LocalDateTime updateTime;
     @Column
     private int version;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime snapshotTime;
 
-    public static FundDetailEntity of(FundDetail fundDetail) {
-        return new FundDetailEntity(fundDetail.getId(), fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getVersion());
-    }
-
-    public FundDetail toDomain() {
-        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), comment, createTime, updateTime, version);
+    public static FundDetailSnapshotEntity of(FundDetail fundDetail) {
+        return new FundDetailSnapshotEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getVersion(), LocalDateTime.now());
     }
 }
