@@ -25,7 +25,7 @@ public class FundDetail {
     private String comment;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-    private int version;
+    private int bindId;
 
     public static FundDetail of(CategoryEnum category, LocalDate addTime, Money amount, String comment, int version) {
         return new FundDetail(0, category, addTime, amount, comment, LocalDateTime.now(), LocalDateTime.now(), version);
@@ -40,14 +40,19 @@ public class FundDetail {
     }
 
     public boolean isSnapshot() {
-        return version != 0;
+        return bindId != 0;
     }
 
     public void snapshot() {
-        this.version++;
+        this.bindId = this.id;
+        this.id = 0;
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 
-    public void copyCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
+    public void copyOld(FundDetail old) {
+        this.id = old.getId();
+        this.createTime = old.getCreateTime();
+        this.updateTime = LocalDateTime.now();
     }
 }

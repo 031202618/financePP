@@ -57,12 +57,13 @@ public class FundDetailService {
     @Transactional
     public void uploadFundDetail(int id, FundDetail fundDetail) {
         FundDetail old = repo.findById(id).map(FundDetailEntity::toDomain).orElseThrow(() -> new RuntimeException(String.format("未找到fundDetail: {%s}", id)));
+
+        fundDetail.copyOld(old);
+        FundDetailEntity newDetail = FundDetailEntity.of(fundDetail);
+        repo.save(newDetail);
+
         old.snapshot();
         repo.save(FundDetailEntity.of(old));
-
-        fundDetail.copyCreateTime(old.getCreateTime());
-        FundDetailEntity fundDetailEntity = FundDetailEntity.of(fundDetail);
-        repo.save(fundDetailEntity);
     }
 
     public List<FundDetail> getAll() {

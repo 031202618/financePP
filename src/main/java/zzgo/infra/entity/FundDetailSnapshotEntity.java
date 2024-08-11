@@ -39,11 +39,11 @@ public class FundDetailSnapshotEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateTime;
     @Column
-    private int version;
+    private int bindId;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime snapshotTime;
 
     public static FundDetailSnapshotEntity of(FundDetail fundDetail) {
-        return new FundDetailSnapshotEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getVersion(), LocalDateTime.now());
+        return new FundDetailSnapshotEntity(0, fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getBindId(), LocalDateTime.now());
     }
 }

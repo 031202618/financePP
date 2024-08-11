@@ -41,13 +41,13 @@ public class FundDetailEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateTime;
     @Column
-    private int version;
+    private int bindId;
 
     public static FundDetailEntity of(FundDetail fundDetail) {
-        return new FundDetailEntity(fundDetail.getId(), fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getVersion());
+        return new FundDetailEntity(fundDetail.getId(), fundDetail.getCategory().getId(), LocalDateTime.of(fundDetail.getAddTime(), LocalTime.MIDNIGHT), fundDetail.getAmount().amount(), fundDetail.getComment(), fundDetail.getCreateTime(), fundDetail.getUpdateTime(), fundDetail.getBindId());
     }
 
     public FundDetail toDomain() {
-        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), comment, createTime, updateTime, version);
+        return new FundDetail(id, CategoryEnum.of(category), recordTime.toLocalDate(), new Money(amount), comment, createTime, updateTime, bindId);
     }
 }
