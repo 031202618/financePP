@@ -40,7 +40,6 @@ public class PayInfoService {
                             (quarter == null || Time.month2Quarter(addTime.getMonthValue()) == quarter) &&
                             (month == null || month == addTime.getMonthValue());
                 })
-                .filter(fundDetail -> !fundDetail.isSnapshot())
                 .toList();
     }
 

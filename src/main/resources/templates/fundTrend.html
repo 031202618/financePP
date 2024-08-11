@@ -34,7 +34,7 @@
     <div id="totalMoneyMonthYearRate" class="alert alert-warning" role="alert">
         总金额累计预计年增长率(月增长之和 / 相差天数 * 365)
     </div>
-    <div id="totalMoneyTrend" style="width: 1200px;height:800px;margin: 0 auto"></div>
+    <div id="totalMoneyTrend" style="width: 2000px;height:800px;margin: 0 auto"></div>
     <div id="stockMoneyFullRate" class="alert alert-success" role="alert">
         理财整体增长率(末月-首月 / 首月)
     </div>
@@ -47,7 +47,7 @@
     <div id="stockMoneyMonthYearRate" class="alert alert-warning" role="alert">
         理财累计预计年增长率(月增长之和 / 相差天数 * 365)
     </div>
-    <div id="stockMoneyTrend" style="width: 1200px;height:800px;margin: 0 auto"></div>
+    <div id="stockMoneyTrend" style="width: 2000px;height:800px;margin: 0 auto"></div>
 </div>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
@@ -61,7 +61,8 @@
         var moneyList = []
         var stackMoneyList = []
         $.each(trend, function (index, data) {
-            ym.push(data.date);
+            console.log(data);
+            ym.push(data.date + "\n" + '达到' + data.beatDesc + "\n" + '击败' + data.beatPercent + '%');
             if (data.rate == 0) {
                 percentList.push('-')
             } else {
@@ -85,7 +86,10 @@
                     axisTick: {
                         alignWithLabel: true
                     },
-                    data: ym
+                    data: ym,
+                    axisLabel: {
+                        fontSize: 20
+                    }
                 }
             ],
             yAxis: [

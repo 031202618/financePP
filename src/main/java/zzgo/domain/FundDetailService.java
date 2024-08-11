@@ -67,7 +67,7 @@ public class FundDetailService {
     }
 
     public List<FundDetail> getAll() {
-        return repo.findAll().stream().map(FundDetailEntity::toDomain).toList();
+        return repo.findAll().stream().map(FundDetailEntity::toDomain).filter(fundDetail -> !fundDetail.isSnapshot()).toList();
     }
 
     public void delete(int id) {

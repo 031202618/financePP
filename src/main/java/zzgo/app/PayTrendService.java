@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import zzgo.app.vo.PayTrendVO;
 import zzgo.domain.FundDetail;
 import zzgo.domain.FundDetailService;
+import zzgo.domain.WinLevel;
 import zzgo.domain.enums.CategoryEnum;
+import zzgo.domain.util.BeatUtil;
 import zzgo.domain.util.FundUtil;
 import zzgo.domain.util.Money;
 import zzgo.domain.util.Time;
@@ -26,6 +28,13 @@ public class PayTrendService {
     private final FundDetailService fundDetailService;
 
     public PayTrendVO getPayTrendVo(YearMonth startYM, YearMonth endYM) {
+        PayTrendVO fullPayTrend = getPayTrendVO(YearMonth.of(2000, 1), YearMonth.of(3000, 1));
+        List<Double> stockRateList = fullPayTrend.stockMoney().stream().map(PayTrendVO.TrendDetail::rate).toList();
+        List<Double> totalRateList = fullPayTrend.totalMoney().stream().map(PayTrendVO.TrendDetail::rate).toList();
+        return getPayTrendVO(startYM, endYM, stockRateList, totalRateList);
+    }
+
+    private PayTrendVO getPayTrendVO(YearMonth startYM, YearMonth endYM) {
         LocalDate startTime = LocalDate.of(startYM.getYear(), startYM.getMonth(), 1);
         LocalDate endTime = LocalDate.of(endYM.getYear(), endYM.getMonth(), 1).plusMonths(1).minusDays(1);
         var ym2Date2Fund = fundDetailService.getAll().stream()
@@ -35,6 +44,25 @@ public class PayTrendService {
         List<List<FundDetail>> totalFund = fillTotalFund(ym2Date2Fund);
         List<Pair<List<FundDetail>, List<FundDetail>>> stockFund = fillStockFund(ym2Date2Fund);
         return buildPayTrendVO(totalFund, stockFund);
+    }
+
+    private PayTrendVO getPayTrendVO(YearMonth startYM, YearMonth endYM, List<Double> stockRateList, List<Double> totalRateList) {
+        PayTrendVO payTrendVO = getPayTrendVO(startYM, endYM);
+        List<PayTrendVO.TrendDetail> totalMoney = payTrendVO.totalMoney();
+        List<PayTrendVO.TrendDetail> stockMoney = payTrendVO.stockMoney();
+
+        for (int i = 0; i < totalMoney.size(); i++) {
+            PayTrendVO.TrendDetail trendDetail = totalMoney.get(i);
+            double beatPercent = BeatUtil.beatPercent(trendDetail.rate(), totalRateList);
+            totalMoney.set(i, new PayTrendVO.TrendDetail(trendDetail.money(), trendDetail.stackMoney(), trendDetail.rate(), trendDetail.date(), WinLevel.getLevel(beatPercent), beatPercent));
+        }
+
+        for (int i = 0; i < stockMoney.size(); i++) {
+            PayTrendVO.TrendDetail trendDetail = stockMoney.get(i);
+            double beatPercent = BeatUtil.beatPercent(trendDetail.rate(), stockRateList);
+            stockMoney.set(i, new PayTrendVO.TrendDetail(trendDetail.money(), trendDetail.stackMoney(), trendDetail.rate(), trendDetail.date(), WinLevel.getLevel(beatPercent), beatPercent));
+        }
+        return payTrendVO;
     }
 
     private PayTrendVO buildPayTrendVO(List<List<FundDetail>> totalFund, List<Pair<List<FundDetail>, List<FundDetail>>> stockFund) {
@@ -75,15 +103,15 @@ public class PayTrendService {
         for (int i = 0; i < totalFund.size(); i++) {
             List<FundDetail> fundDetails = totalFund.get(i);
             if (i == totalFund.size() - 1) {
-                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), Money.zero(), 0, fundDetails.get(0).getAddTime()));
+                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), Money.zero(), 0, fundDetails.get(0).getAddTime(), "", 0));
             } else {
-                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), FundUtil.getTotalMoney(totalFund.get(i + 1)).subtract(FundUtil.getTotalMoney(fundDetails)), FundUtil.calcRate(fundDetails, totalFund.get(i + 1)), fundDetails.get(0).getAddTime()));
+                totalMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundDetails), FundUtil.getTotalMoney(totalFund.get(i + 1)).subtract(FundUtil.getTotalMoney(fundDetails)), FundUtil.calcRate(fundDetails, totalFund.get(i + 1)), fundDetails.get(0).getAddTime(), "", 0));
             }
         }
         totalMoneyMonthRate = totalMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         totalMoneyMonthYearRate = (totalMoneyMonthRate / totalMoneyGapDay) * 365;
         for (Pair<List<FundDetail>, List<FundDetail>> fundPair : stockFund) {
-            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getAddTime()));
+            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getAddTime(), "", 0));
         }
         stockMoneyMonthRate = stockMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         stockMoneyMonthYearRate = (stockMoneyMonthRate / stockMoneyGapDay) * 365;

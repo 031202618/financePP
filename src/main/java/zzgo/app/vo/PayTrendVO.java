@@ -25,7 +25,9 @@ public record PayTrendVO(
             Money money,
             Money stackMoney,
             double rate,
-            LocalDate date
+            LocalDate date,
+            String beatDesc,
+            double beatPercent
     ) {
     }
 }
