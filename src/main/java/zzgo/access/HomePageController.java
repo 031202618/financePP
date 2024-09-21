@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zzgo.app.HomePageService;
+import zzgo.app.vo.HomePageVO;
 import zzgo.domain.HomePageInfo;
 
 @RestController
@@ -15,7 +16,7 @@ public class HomePageController {
     private final HomePageService homePageService;
 
     @GetMapping("/info")
-    public HomePageInfo getHomePageInfo(){
+    public HomePageVO getHomePageInfo(){
         return homePageService.getHomePageInfo();
     }
 

@@ -7,7 +7,7 @@ spring:
   application:
     name: financePP
   datasource:
-    url: jdbc:mysql://192.168.0.104:3306/financepp
+    url: jdbc:mysql://localhost:3306/financepp
     username: root
     password: abctod
     driver-class-name: com.mysql.cj.jdbc.Driver

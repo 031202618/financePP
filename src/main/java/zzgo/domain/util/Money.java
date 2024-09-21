@@ -49,4 +49,8 @@ public record Money(
         return BigDecimal.valueOf(this.amount).divide(BigDecimal.valueOf(money.amount), 2, DEFAULT_ROUNDING_MODE).doubleValue();
     }
 
+    public boolean isZero(){
+        return amount == 0;
+    }
+
 }
