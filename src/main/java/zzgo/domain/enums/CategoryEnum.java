@@ -41,4 +41,8 @@ public enum CategoryEnum {
             default -> "";
         };
     }
+
+    public boolean isSalary() {
+        return this == LQKZ_GZ;
+    }
 }

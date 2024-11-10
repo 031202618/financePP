@@ -39,6 +39,10 @@ public class FundDetail {
         return category.isStock();
     }
 
+    public boolean isSalary() {
+        return category.isSalary();
+    }
+
     public boolean isSnapshot() {
         return bindId != 0;
     }
