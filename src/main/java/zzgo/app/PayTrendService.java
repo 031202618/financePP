@@ -53,7 +53,7 @@ public class PayTrendService {
 
         for (int i = 0; i < totalMoney.size(); i++) {
             PayTrendVO.TrendDetail trendDetail = totalMoney.get(i);
-            double beatPercent = BeatUtil.beatPercent(trendDetail.rate(), totalRateList);
+            double beatPercent = BeatUtil.beatPercent(trendDetail.rate(), filterLastMonth(totalRateList));
             totalMoney.set(i, new PayTrendVO.TrendDetail(trendDetail.money(), trendDetail.stackMoney(), trendDetail.rate(), trendDetail.date(), WinLevel.getLevel(beatPercent), beatPercent));
         }
 
@@ -63,6 +63,19 @@ public class PayTrendService {
             stockMoney.set(i, new PayTrendVO.TrendDetail(trendDetail.money(), trendDetail.stackMoney(), trendDetail.rate(), trendDetail.date(), WinLevel.getLevel(beatPercent), beatPercent));
         }
         return payTrendVO;
+    }
+
+    private List<Double> filterLastMonth(List<Double> totalRateList) {
+        boolean find = false;
+        List<Double> ret = new ArrayList<>();
+        for (Double rate : totalRateList) {
+            if (!find && rate <= 0) {
+                find = true;
+                continue;
+            }
+            ret.add(rate);
+        }
+        return ret;
     }
 
     private PayTrendVO buildPayTrendVO(List<List<FundDetail>> totalFund, List<Pair<List<FundDetail>, List<FundDetail>>> stockFund) {

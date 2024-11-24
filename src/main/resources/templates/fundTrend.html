@@ -62,10 +62,11 @@
         var stackMoneyList = []
         $.each(trend, function (index, data) {
             console.log(data);
-            ym.push(data.date + "\n" + '达到' + data.beatDesc + "\n" + '击败' + data.beatPercent + '%');
-            if (data.rate == 0) {
+            if (!data.rate > 0) {
+                ym.push(data.date);
                 percentList.push('-')
             } else {
+                ym.push(data.date + "\n" + '达到' + data.beatDesc + "\n" + '击败' + data.beatPercent + '%');
                 percentList.push(data.rate.toFixed(2))
             }
             moneyList.push(data.money.amount / 1000000)
@@ -106,8 +107,8 @@
                 {
                     type: 'value',
                     name: '收益率',
-                    min: -20,
-                    max: 20,
+                    min: -10,
+                    max: 30,
                     position: 'right',
                     axisLabel: {
                         formatter: '{value} %'

@@ -25,11 +25,12 @@ public class HomePageService {
         List<FundDetail> allFund = fundDetailService.getAll();
         List<FundDetail> firstFund = FundUtil.getFirstMonthFund(allFund);
         List<FundDetail> lastFund = FundUtil.getLastMonthFund(allFund);
-        List<FundDetail> firstStockFund = firstFund.stream().filter(FundDetail::isStock).toList();
-        List<FundDetail> lastStockFund = lastFund.stream().filter(FundDetail::isStock).filter(fundDetail -> !fundDetail.isSalary()).toList();
+        List<FundDetail> firstStockFund = firstFund.stream().filter(FundDetail::isStock).filter(fundDetail -> !fundDetail.isSalary()).toList();
+        List<FundDetail> lastStockFund = lastFund.stream().filter(FundDetail::isStock).toList();
+        Money allSalary = FundUtil.getTotalMoney(allFund.stream().filter(FundDetail::isSalary).toList());
 
         Money allFundDiff = FundUtil.getTotalMoney(lastFund).subtract(FundUtil.getTotalMoney(firstFund));
-        Money stockFundDiff = FundUtil.getTotalMoney(lastStockFund).subtract(FundUtil.getTotalMoney(firstStockFund));
+        Money stockFundDiff = FundUtil.getTotalMoney(lastStockFund).subtract(FundUtil.getTotalMoney(firstStockFund)).subtract(allSalary);
         return new HomePageVO(
                 homePageInfo,
                 allFundDiff.toAmount(),
