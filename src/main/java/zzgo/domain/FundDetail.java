@@ -59,4 +59,8 @@ public class FundDetail {
         this.createTime = old.getCreateTime();
         this.updateTime = LocalDateTime.now();
     }
+
+    public boolean isReduction() {
+        return category.isReduction();
+    }
 }

@@ -18,6 +18,7 @@ public enum CategoryEnum {
     HJ(1004, "黄金"),
     LQKZ(1005, "理财空置"),
     LQKZ_GZ(1006, "理财空置-工资"),
+    LQZC(1007, "理财转出"),
     SH(2001, "生活"),
     TB(3001, "玩乐"),
     GJJ(4001, "公积金");
@@ -44,5 +45,9 @@ public enum CategoryEnum {
 
     public boolean isSalary() {
         return this == LQKZ_GZ;
+    }
+
+    public boolean isReduction() {
+        return this == LQZC;
     }
 }

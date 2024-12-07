@@ -30,7 +30,8 @@ public class PayAnalysisService {
         }
         LocalDate maxDate = fundDetails.stream().map(FundDetail::getAddTime).max(LocalDate::compareTo).get();
         fundDetails = fundDetails.stream().filter(x -> x.getAddTime().equals(maxDate)).toList();
-        Map<String, String> module2Money = fundDetails.stream().collect(Collectors.groupingBy(x -> x.getCategory().getModule())).entrySet()
+        //去除扣除费用
+        Map<String, String> module2Money = fundDetails.stream().filter(x -> !x.isReduction()).collect(Collectors.groupingBy(x -> x.getCategory().getModule())).entrySet()
                 .stream()
                 .map(entry -> {
                     Money money = entry.getValue().stream().map(FundDetail::getAmount).reduce(Money::add).orElse(Money.zero());

@@ -46,7 +46,11 @@
         })
         // 计算总和
         var total = allData.reduce(function (sum, item) {
-            return sum + item.value;
+            if (item.name === '理财转出') {
+                return sum;
+            } else {
+                return sum + item.value;
+            }
         }, 0).toFixed(2);
         option = {
             title: {
@@ -108,7 +112,11 @@
         })
         // 计算总和
         var total = allData.reduce(function (sum, item) {
-            return sum + item.value;
+            if (item.name.startsWith('理财转出')) {
+                return sum;
+            } else {
+                return sum + item.value;
+            }
         }, 0).toFixed(2);
         option = {
             title: {
@@ -167,7 +175,11 @@
         })
         // 计算总和
         var total = allData.reduce(function (sum, item) {
-            return sum + item.value;
+            if (item.name === '理财转出') {
+                return sum;
+            } else {
+                return sum + item.value;
+            }
         }, 0).toFixed(2);
 
         option = {

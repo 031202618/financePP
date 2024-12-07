@@ -31,7 +31,7 @@ public class PayTrendService {
         PayTrendVO fullPayTrend = getPayTrendVO(YearMonth.of(2000, 1), YearMonth.of(3000, 1));
         List<Double> stockRateList = fullPayTrend.stockMoney().stream().map(PayTrendVO.TrendDetail::rate).toList();
         List<Double> totalRateList = fullPayTrend.totalMoney().stream().map(PayTrendVO.TrendDetail::rate).toList();
-        return getPayTrendVO(startYM, endYM, stockRateList, totalRateList);
+        return buildBeatPercentPayTrendVO(startYM, endYM, stockRateList, totalRateList);
     }
 
     private PayTrendVO getPayTrendVO(YearMonth startYM, YearMonth endYM) {
@@ -46,7 +46,7 @@ public class PayTrendService {
         return buildPayTrendVO(totalFund, stockFund);
     }
 
-    private PayTrendVO getPayTrendVO(YearMonth startYM, YearMonth endYM, List<Double> stockRateList, List<Double> totalRateList) {
+    private PayTrendVO buildBeatPercentPayTrendVO(YearMonth startYM, YearMonth endYM, List<Double> stockRateList, List<Double> totalRateList) {
         PayTrendVO payTrendVO = getPayTrendVO(startYM, endYM);
         List<PayTrendVO.TrendDetail> totalMoney = payTrendVO.totalMoney();
         List<PayTrendVO.TrendDetail> stockMoney = payTrendVO.stockMoney();
@@ -124,7 +124,8 @@ public class PayTrendService {
         totalMoneyMonthRate = totalMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         totalMoneyMonthYearRate = (totalMoneyMonthRate / totalMoneyGapDay) * 365;
         for (Pair<List<FundDetail>, List<FundDetail>> fundPair : stockFund) {
-            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getAddTime(), "", 0));
+            //理财资金量应减去扣除费用
+            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey().stream().filter(x -> !x.isReduction()).toList()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getAddTime(), "", 0));
         }
         stockMoneyMonthRate = stockMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         stockMoneyMonthYearRate = (stockMoneyMonthRate / stockMoneyGapDay) * 365;
@@ -174,7 +175,15 @@ public class PayTrendService {
 //            if (localDates.size() == 1 && entry.getKey().equals(maxYearMonth)) {
 //                return;
 //            }
-            totalFund.add(date2Details.entrySet().stream().max(Map.Entry.comparingByKey()).map(Map.Entry::getValue).get());
+            totalFund.add(
+                    date2Details.entrySet().stream()
+                            .max(Map.Entry.comparingByKey())
+                            .map(Map.Entry::getValue)
+                            .get()
+                            .stream()
+                            .filter(x -> !x.isReduction())
+                            .toList()
+            );
         });
         return totalFund;
     }
