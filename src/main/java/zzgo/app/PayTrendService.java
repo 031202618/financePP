@@ -125,7 +125,15 @@ public class PayTrendService {
         totalMoneyMonthYearRate = (totalMoneyMonthRate / totalMoneyGapDay) * 365;
         for (Pair<List<FundDetail>, List<FundDetail>> fundPair : stockFund) {
             //理财资金量应减去扣除费用
-            stockMoney.add(new PayTrendVO.TrendDetail(FundUtil.getTotalMoney(fundPair.getKey().stream().filter(x -> !x.isReduction()).toList()), FundUtil.getTotalMoney(fundPair.getValue()).subtract(FundUtil.getTotalMoney(fundPair.getKey())), FundUtil.calcRate(fundPair.getKey(), fundPair.getValue()), fundPair.getKey().get(0).getAddTime(), "", 0));
+            List<FundDetail> lastMonthDetail = fundPair.getKey().stream().filter(x -> !x.isReduction()).toList();
+            Money lastMonthMoney = FundUtil.getTotalMoney(lastMonthDetail);
+            stockMoney.add(
+                    new PayTrendVO.TrendDetail(
+                            lastMonthMoney,
+                            FundUtil.getTotalMoney(fundPair.getValue()).subtract(lastMonthMoney),
+                            FundUtil.calcRate(lastMonthDetail, fundPair.getValue()),
+                            fundPair.getKey().get(0).getAddTime(), "", 0)
+            );
         }
         stockMoneyMonthRate = stockMoney.stream().map(PayTrendVO.TrendDetail::rate).reduce(0.0, Double::sum);
         stockMoneyMonthYearRate = (stockMoneyMonthRate / stockMoneyGapDay) * 365;
