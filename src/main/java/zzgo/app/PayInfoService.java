@@ -33,7 +33,7 @@ public class PayInfoService {
 
     public List<FundDetail> listFundDetails(Integer year, Integer quarter, Integer month) {
         return fundDetailService.getAll().stream()
-                .sorted((x, y) -> y.getAddTime().compareTo(x.getAddTime()))
+                .sorted((x, y) -> y.getId() - x.getId())
                 .filter(fundDetail -> {
                     LocalDate addTime = fundDetail.getAddTime();
                     return (year == null || addTime.getYear() == year) &&

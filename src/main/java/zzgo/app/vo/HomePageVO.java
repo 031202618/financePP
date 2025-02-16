@@ -3,9 +3,12 @@ package zzgo.app.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.tuple.Triple;
 import zzgo.domain.HomePageInfo;
+import zzgo.domain.util.Money;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * @author zhengw
@@ -21,4 +24,8 @@ public class HomePageVO {
     private double stockRate;
     private LocalDate startFundDate;
     private LocalDate endFundDate;
+    /**
+     * {年份: {年初理财资金, 年末理财资金, 整体收益}}
+     */
+    private Map<Integer, Triple<Money, Money, Money>> year2FundSummary;
 }

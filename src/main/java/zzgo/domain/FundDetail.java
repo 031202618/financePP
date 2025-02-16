@@ -63,4 +63,14 @@ public class FundDetail {
     public boolean isReduction() {
         return category.isReduction();
     }
+
+    public void delay2NextMonth() {
+        id = 0;
+        addTime = addTime.plusMonths(1);
+        createTime = LocalDateTime.now();
+        updateTime = LocalDateTime.now();
+        if (isSalary()) {
+            category = CategoryEnum.LQKZ;
+        }
+    }
 }
